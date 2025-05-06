@@ -29,7 +29,7 @@ public class ClientEntity {
 
     private String country;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "country_code_id")
     private ClientCountryCodeEntity clientCountryCode;
 }

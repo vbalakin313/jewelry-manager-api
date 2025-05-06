@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Country {
     @JsonProperty("ccn3")
-    private String numericCode;
+    private int numericCode;
 
-    public String getNumericCode() {
+    public int getNumericCode() {
         return numericCode;
     }
 }
