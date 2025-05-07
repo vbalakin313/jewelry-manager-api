@@ -1,5 +1,6 @@
 package ru.vbalakin.jewelrymanagerapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
@@ -29,7 +30,11 @@ public class ClientEntity {
 
     private String country;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "country_code_id")
     private ClientCountryCodeEntity clientCountryCode;
+
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private UinEntity uin;
 }

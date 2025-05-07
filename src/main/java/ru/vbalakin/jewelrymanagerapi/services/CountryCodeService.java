@@ -1,13 +1,15 @@
 package ru.vbalakin.jewelrymanagerapi.services;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import ru.vbalakin.jewelrymanagerapi.domain.models.Country;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientCountryCodeEntity;
+import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
 
 @Service
 public class CountryCodeService {
-    private ClientCountryCodeEntity clientCountryCode;
     private static final String API_URL = "https://restcountries.com/v3.1/name/";
 
     public ClientCountryCodeEntity getNumericCountryCode(String countryName) {
@@ -23,8 +25,8 @@ public class CountryCodeService {
                         .countryCode(countries[0].getNumericCode())
                         .build();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (BadRequestException e) {
+            throw new BadRequestException("This country name is not valid");
         }
 
         return null;

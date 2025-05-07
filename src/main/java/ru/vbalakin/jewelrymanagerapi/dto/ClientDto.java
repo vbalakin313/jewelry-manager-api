@@ -4,6 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
+import ru.vbalakin.jewelrymanagerapi.entities.ClientCountryCodeEntity;
 
 import java.util.UUID;
 
@@ -28,4 +29,6 @@ public class ClientDto {
 
     @NonNull
     private String country;
+
+    private UinDto uin;
 }

@@ -1,14 +1,17 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.domain.helper.ControllerHelper;
 import ru.vbalakin.jewelrymanagerapi.dto.ClientDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
-import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
+import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.ClientDtoFactory;
+import ru.vbalakin.jewelrymanagerapi.repositories.ClientCountryCodeRepository;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 import ru.vbalakin.jewelrymanagerapi.services.CountryCodeService;
 
 import java.util.List;
@@ -17,22 +20,14 @@ import java.util.UUID;
 
 
 @RestController
+@AllArgsConstructor
 public class ClientController {
 
     private final ClientRepository clientRepository;
     private final CountryCodeService countryCodeService;
     private final ClientDtoFactory clientDtoFactory;
     private final ControllerHelper helper;
-
-    public ClientController(ClientRepository clientRepository,
-                            ClientDtoFactory clientDtoFactory,
-                            CountryCodeService countryCodeService,
-                            ControllerHelper helper) {
-        this.clientRepository = clientRepository;
-        this.clientDtoFactory = clientDtoFactory;
-        this.countryCodeService = countryCodeService;
-        this.helper = helper;
-    }
+    private final ClientCountryCodeRepository clientCountryCodeRepository;
 
     private static final String ALL_CLIENTS = "/api/v1/clients";
     private static final String CREATE_CLIENT = "/api/v1/clients";
@@ -60,7 +55,7 @@ public class ClientController {
         client.setCountry(country);
         client.setClientCountryCode(countryCodeService.getNumericCountryCode(country));
 
-        ClientEntity updatedClient = clientRepository.saveAndFlush(client);
+       ClientEntity updatedClient = clientRepository.saveAndFlush(client);
 
         return updatedClient;
     }
@@ -87,6 +82,6 @@ public class ClientController {
     @DeleteMapping(DELETE_CLIENT)
     void deleteClient(@PathVariable UUID id){
 
-         clientRepository.deleteById(id);
+        clientRepository.deleteById(id);
     }
 }
