@@ -3,7 +3,8 @@ package ru.vbalakin.jewelrymanagerapi.dto;
 
 import lombok.*;
 
-import java.util.UUID;
+import java.util.List;
+
 
 @Data
 @Builder
@@ -13,4 +14,7 @@ public class UinDto {
     @NonNull
     private String uin;
 
+    private List<JewelryDto> jewelries;
+
+    private List<PreciousMetalDto> preciousMetals;
 }

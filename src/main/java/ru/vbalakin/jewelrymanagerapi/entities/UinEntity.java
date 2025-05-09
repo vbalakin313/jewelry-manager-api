@@ -3,6 +3,8 @@ package ru.vbalakin.jewelrymanagerapi.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -24,4 +26,9 @@ public class UinEntity {
     @JoinColumn(name = "id")
     private ClientEntity client;
 
+    @OneToMany(mappedBy = "uin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JewelryEntity> jewelries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "uin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PreciousMetalEntity> preciousMetals = new ArrayList<>();
 }

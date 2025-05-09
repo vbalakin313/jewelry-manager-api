@@ -35,6 +35,6 @@ public class ClientEntity {
     private ClientCountryCodeEntity clientCountryCode;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private UinEntity uin;
+
 }

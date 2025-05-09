@@ -6,17 +6,15 @@ import org.springframework.web.bind.annotation.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.domain.helper.ControllerHelper;
 import ru.vbalakin.jewelrymanagerapi.dto.ClientDto;
+import ru.vbalakin.jewelrymanagerapi.dto.UinDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
-import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.ClientDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientCountryCodeRepository;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 import ru.vbalakin.jewelrymanagerapi.services.CountryCodeService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -27,7 +25,6 @@ public class ClientController {
     private final CountryCodeService countryCodeService;
     private final ClientDtoFactory clientDtoFactory;
     private final ControllerHelper helper;
-    private final ClientCountryCodeRepository clientCountryCodeRepository;
 
     private static final String ALL_CLIENTS = "/api/v1/clients";
     private static final String CREATE_CLIENT = "/api/v1/clients";
@@ -35,13 +32,24 @@ public class ClientController {
     private static final String DELETE_CLIENT = "/api/v1/clients/{id}";
 
     @GetMapping(ALL_CLIENTS)
-    public List<ClientEntity> allClients(){
+    public List<ClientDto> allClients(){
+        List<ClientEntity> clients = clientRepository.findAll();
 
-        return clientRepository.findAll();
+        return clients.stream()
+                .map(client -> {
+                    ClientDto dto = new ClientDto();
+                    dto.setId(client.getId());
+                    dto.setName(client.getName());
+                    dto.setSurname(client.getSurname());
+                    dto.setGender(client.getGender());
+                    dto.setCountry(client.getCountry());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @PatchMapping(EDIT_CLIENT)
-    public ClientEntity editClient(@RequestParam(value = "id", required = false) UUID optionalClientId,
+    public ClientDto editClient(@RequestParam(value = "id", required = false) UUID optionalClientId,
                                    @RequestParam String name,
                                    @RequestParam String surname,
                                    @RequestParam Gender gender,
@@ -57,7 +65,7 @@ public class ClientController {
 
        ClientEntity updatedClient = clientRepository.saveAndFlush(client);
 
-        return updatedClient;
+        return clientDtoFactory.makeClientDto(updatedClient);
     }
 
     @PutMapping(CREATE_CLIENT)
@@ -81,6 +89,8 @@ public class ClientController {
 
     @DeleteMapping(DELETE_CLIENT)
     void deleteClient(@PathVariable UUID id){
+
+        helper.getClientOrThrowException(id);
 
         clientRepository.deleteById(id);
     }

@@ -3,7 +3,7 @@ package ru.vbalakin.jewelrymanagerapi.dto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
-import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
+import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
 
 import java.util.UUID;
 
@@ -11,8 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientDto {
-
+public class JewelryDto {
     @NonNull
     private UUID id;
 
@@ -20,13 +19,11 @@ public class ClientDto {
     private String name;
 
     @NonNull
-    private String surname;
+    private String description;
+
+    private double weight;
 
     @NonNull
     @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @NonNull
-    private String country;
-
+    private MetalType material;
 }
