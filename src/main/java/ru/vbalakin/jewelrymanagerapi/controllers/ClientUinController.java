@@ -48,8 +48,8 @@ public class ClientUinController {
         UinEntity uin = UinEntity.builder()
                 .uin(clientUinGeneratorService.clientUinGenerated(client.getId()))
                 .client(client)
-                .jewelries(new ArrayList<>())
-                .preciousMetals(new ArrayList<>())
+                .jewelries(client.getUin().getJewelries())
+                .preciousMetals(client.getUin().getPreciousMetals())
                 .build();
 
         uin = uinRepository.saveAndFlush(uin);

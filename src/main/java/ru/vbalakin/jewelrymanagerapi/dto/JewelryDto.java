@@ -4,6 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
+import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 
 import java.util.UUID;
 
@@ -26,4 +27,5 @@ public class JewelryDto {
     @NonNull
     @Enumerated(EnumType.STRING)
     private MetalType material;
+
 }
