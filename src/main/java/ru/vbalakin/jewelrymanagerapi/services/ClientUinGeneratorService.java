@@ -8,6 +8,7 @@ import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
 
 import java.time.Year;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -29,11 +30,14 @@ public class ClientUinGeneratorService {
         ClientCountryCodeEntity code = countryCodeService.getNumericCountryCode(client.getCountry());
         String countryCode = String.valueOf(code.getCountryCode());
 
+        String uuidHash = String.valueOf(id.hashCode());
+        String codePart = uuidHash.replace("-","");
+        codePart = codePart.substring(0, Math.min(10, codePart.length()));
+        codePart = String.format("%10s", codePart).replace(' ','0');
 
 
 
-        //TODO:SSS-YY-NNNNNNNNNN-C
 
-        return countryCode + year;
+        return countryCode + year + codePart;
     }
 }
