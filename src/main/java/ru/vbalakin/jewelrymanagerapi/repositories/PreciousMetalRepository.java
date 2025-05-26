@@ -1,7 +1,6 @@
 package ru.vbalakin.jewelrymanagerapi.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.vbalakin.jewelrymanagerapi.entities.JewelryEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.PreciousMetalEntity;
 
 import java.util.UUID;

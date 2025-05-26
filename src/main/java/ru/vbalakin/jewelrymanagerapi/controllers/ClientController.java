@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.domain.helper.ControllerHelper;
 import ru.vbalakin.jewelrymanagerapi.dto.ClientDto;
-import ru.vbalakin.jewelrymanagerapi.dto.UinDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.ClientDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;

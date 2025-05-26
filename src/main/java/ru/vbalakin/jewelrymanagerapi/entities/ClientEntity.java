@@ -1,6 +1,5 @@
 package ru.vbalakin.jewelrymanagerapi.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;

@@ -8,7 +8,6 @@ import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
 
 import java.time.Year;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -35,9 +34,9 @@ public class ClientUinGeneratorService {
         codePart = codePart.substring(0, Math.min(10, codePart.length()));
         codePart = String.format("%10s", codePart).replace(' ','0');
 
+        WeightedSumLastNumber weightedSumLastNumber = new WeightedSumLastNumber(client);
+        int lastNum = (int)weightedSumLastNumber.weightedSum(client);
 
-
-
-        return countryCode + year + codePart;
+        return countryCode + year + codePart + lastNum;
     }
 }

@@ -8,9 +8,7 @@ import ru.vbalakin.jewelrymanagerapi.domain.helper.ControllerHelper;
 import ru.vbalakin.jewelrymanagerapi.dto.UinDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
-import ru.vbalakin.jewelrymanagerapi.exceptions.NotFoundException;
 import ru.vbalakin.jewelrymanagerapi.factories.UinDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
 import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 import ru.vbalakin.jewelrymanagerapi.services.ClientUinGeneratorService;
 

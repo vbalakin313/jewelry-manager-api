@@ -3,11 +3,8 @@ package ru.vbalakin.jewelrymanagerapi.controllers;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
-import ru.vbalakin.jewelrymanagerapi.dto.ClientDto;
 import ru.vbalakin.jewelrymanagerapi.dto.JewelryDto;
-import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.JewelryEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.JewelryDtoFactory;
@@ -16,7 +13,6 @@ import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
