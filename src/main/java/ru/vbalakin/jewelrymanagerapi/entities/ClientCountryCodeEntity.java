@@ -19,5 +19,5 @@ public class ClientCountryCodeEntity {
     @Column(nullable = false, updatable = false)
     private UUID id;
 
-    private int countryCode;
+    private Integer countryCode;
 }

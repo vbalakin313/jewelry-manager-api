@@ -23,7 +23,7 @@ public class JewelryEntity {
 
     private String description;
 
-    private double weight;
+    private Double weight;
 
     @Enumerated(EnumType.STRING)
     private MetalType material;

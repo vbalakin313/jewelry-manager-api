@@ -15,7 +15,9 @@ public class ControllerHelper {
     private final ClientRepository clientRepository;
 
     public ClientEntity getClientOrThrowException(UUID id){
-         return clientRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("Client with this id is not found")));
+         return clientRepository.findById(id).orElseThrow(
+                 () -> new NotFoundException(String.format("Client with this id is not found"))
+         );
     }
 
 }

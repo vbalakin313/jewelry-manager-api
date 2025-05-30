@@ -10,6 +10,5 @@ import java.util.UUID;
 public interface UinRepository extends JpaRepository<UinEntity, UUID> {
     Optional<UinEntity> findByClientId(UUID clientId);
 
-    @EntityGraph(attributePaths = {"jewelries", "preciousMetals"})
     Optional<UinEntity> findByUin(String uin);
 }

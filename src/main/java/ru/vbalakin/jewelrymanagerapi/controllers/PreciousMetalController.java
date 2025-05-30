@@ -1,20 +1,21 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
 import ru.vbalakin.jewelrymanagerapi.dto.PreciousMetalDto;
 import ru.vbalakin.jewelrymanagerapi.entities.PreciousMetalEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
+import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
 import ru.vbalakin.jewelrymanagerapi.factories.PreciousMetalDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.repositories.PreciousMetalRepository;
 import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
+@Transactional
 @AllArgsConstructor
 public class PreciousMetalController {
 
@@ -24,18 +25,19 @@ public class PreciousMetalController {
     private static final String CREATE_METAL = "/api/v1/metals";
     private static final String ALL_METAL = "/api/v1/metals";
     private static final String EDIT_METAL = "/api/v1/metals";
-    private static final String DELETE_METAL = "/api/v1/metals/{id}";
+    private static final String DELETE_METAL = "/api/v1/metals/{uin}";
     private final UinRepository uinRepository;
 
     @PutMapping(CREATE_METAL)
-    public PreciousMetalDto createMetal(@RequestParam UUID uinId,
+    public PreciousMetalDto createMetal(@RequestParam String uin,
                                         @RequestParam MetalType metalType,
-                                        @RequestParam double weight,
+                                        @RequestParam Double weight,
                                         @RequestParam String assay,
                                         @RequestParam String form){
 
-        UinEntity uin = uinRepository.findById(uinId).orElseThrow(
-                () -> new EntityNotFoundException("UIN not found with id: " + uinId)
+
+        UinEntity uinEntity = uinRepository.findByUin(uin).orElseThrow(
+                () -> new BadRequestException("Uin not found")
         );
 
         PreciousMetalEntity preciousMetal = preciousMetalRepository.saveAndFlush(
@@ -44,7 +46,7 @@ public class PreciousMetalController {
                         .weight(weight)
                         .assay(assay)
                         .form(form)
-                        .uin(uin)
+                        .uin(uinEntity)
                         .build()
         );
 
@@ -60,13 +62,13 @@ public class PreciousMetalController {
     }
 
     @PatchMapping(EDIT_METAL)
-    public PreciousMetalDto editMetal(@RequestParam(value = "id", required = false) UUID metalId,
+    public PreciousMetalDto editMetal(@RequestParam(value = "uin_id", required = false) String uin,
                                       @RequestParam MetalType metalType,
-                                      @RequestParam double weight,
+                                      @RequestParam Double weight,
                                       @RequestParam String assay,
                                       @RequestParam String form){
 
-          PreciousMetalEntity preciousMetal = preciousMetalRepository.getById(metalId);
+          PreciousMetalEntity preciousMetal = preciousMetalRepository.getByUin_Uin(uin);
 
           preciousMetal.setMetalType(metalType);
           preciousMetal.setWeight(weight);
@@ -79,9 +81,9 @@ public class PreciousMetalController {
     }
 
     @DeleteMapping(DELETE_METAL)
-    void deleteMetal(@PathVariable UUID id){
+    void deleteMetal(@PathVariable String uin){
 
-        preciousMetalRepository.deleteById(id);
+        preciousMetalRepository.deleteByUin_Uin(uin);
     }
 
 }

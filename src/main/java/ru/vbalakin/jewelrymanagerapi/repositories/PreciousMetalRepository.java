@@ -7,4 +7,8 @@ import java.util.UUID;
 
 public interface PreciousMetalRepository extends JpaRepository<PreciousMetalEntity, UUID> {
     PreciousMetalEntity getById(UUID id);
+
+    PreciousMetalEntity getByUin_Uin(String uinUin);
+
+    void deleteByUin_Uin(String uinUin);
 }

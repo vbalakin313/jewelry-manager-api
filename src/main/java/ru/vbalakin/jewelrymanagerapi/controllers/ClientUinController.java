@@ -6,9 +6,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.vbalakin.jewelrymanagerapi.domain.helper.ControllerHelper;
 import ru.vbalakin.jewelrymanagerapi.dto.UinDto;
+import ru.vbalakin.jewelrymanagerapi.dto.UinFullClientInformationDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
+import ru.vbalakin.jewelrymanagerapi.exceptions.NotFoundException;
 import ru.vbalakin.jewelrymanagerapi.factories.UinDtoFactory;
+import ru.vbalakin.jewelrymanagerapi.factories.UinFullClientInformationDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 import ru.vbalakin.jewelrymanagerapi.services.ClientUinGeneratorService;
 
@@ -18,16 +21,20 @@ import java.util.UUID;
 
 
 @RestController
+@Transactional
 @AllArgsConstructor
 public class ClientUinController {
 
     private final UinRepository uinRepository;
     private final UinDtoFactory uinDtoFactory;
+    private final UinFullClientInformationDtoFactory uinFullClientInformationDtoFactory;
     private final ClientUinGeneratorService clientUinGeneratorService;
     private final ControllerHelper helper;
 
     private static final String GET_UIN = "/api/v1/client/uin";
     private static final String CREATE_UIN = "/api/v1/client/{clientId}/uin";
+    private static final String GET_FULL_INFORMATION = "/api/v1/client/{clientUin}/uin";
+
 
     @GetMapping(GET_UIN)
     public Optional<UinDto> getUin(@RequestParam(value = "id", required = false) UUID clientId){
@@ -38,7 +45,6 @@ public class ClientUinController {
     }
 
     @PutMapping(CREATE_UIN)
-    @Transactional
     public UinDto createUin(@PathVariable UUID clientId) {
 
         ClientEntity client = helper.getClientOrThrowException(clientId);
@@ -62,4 +68,13 @@ public class ClientUinController {
         return uinDtoFactory.makeUinDto(uin);
     }
 
+    @GetMapping(GET_FULL_INFORMATION)
+    public UinFullClientInformationDto getFullInformation(@PathVariable String clientUin) {
+
+        UinEntity uinEntity = uinRepository.findByUin(clientUin).orElseThrow(
+                () -> new NotFoundException("Uin not found")
+        );
+
+        return uinFullClientInformationDtoFactory.makeUinFullClientInfoDto(uinEntity);
+    }
 }

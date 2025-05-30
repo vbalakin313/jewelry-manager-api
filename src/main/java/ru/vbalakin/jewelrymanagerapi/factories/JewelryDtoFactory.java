@@ -18,7 +18,7 @@ public class JewelryDtoFactory {
 
     public JewelryDto makeJewelryDto(JewelryEntity jewelry) {
         return JewelryDto.builder()
-                .id(jewelry.getId())
+                .uin(jewelry.getUin().getUin())
                 .name(jewelry.getName())
                 .description(jewelry.getDescription())
                 .weight(jewelry.getWeight())

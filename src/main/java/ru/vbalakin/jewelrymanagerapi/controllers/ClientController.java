@@ -1,6 +1,7 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
+@Transactional
 @AllArgsConstructor
 public class ClientController {
 

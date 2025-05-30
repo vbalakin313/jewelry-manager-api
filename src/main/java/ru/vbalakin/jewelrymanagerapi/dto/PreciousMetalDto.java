@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
 
-import java.util.UUID;
 
 @Data
 @Builder
@@ -16,12 +15,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PreciousMetalDto {
 
-    private UUID id;
+    private String uin;
 
     @Enumerated(EnumType.STRING)
     private MetalType metalType;
 
-    private double weight;
+    private Double weight;
 
     private String assay;
 

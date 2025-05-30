@@ -6,6 +6,7 @@ import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class WeightedSumLastNumber {
 
     public WeightedSumLastNumber(ClientEntity client) {
@@ -19,11 +20,10 @@ public class WeightedSumLastNumber {
         weights.put("gender", 0.3);
         weights.put("country", 1.0);
 
-        double genderValue = (gender == Gender.MALE) ? 1.0 : 0.0;
-        double countryValue = mapCountryValue(client.getCountry());
+        Double genderValue = (gender == Gender.MALE) ? 1.0 : 0.0;
+        Double countryValue = mapCountryValue(client.getCountry());
 
         return (weights.get("gender") * genderValue) + (weights.get("country") * countryValue);
-
     }
 
     private double mapCountryValue(String country){

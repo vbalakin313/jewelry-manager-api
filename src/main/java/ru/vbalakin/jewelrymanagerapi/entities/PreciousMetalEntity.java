@@ -22,7 +22,7 @@ public class PreciousMetalEntity {
     @Enumerated(EnumType.STRING)
     private MetalType metalType;
 
-    private double weight;
+    private Double weight;
 
     private String assay;
 

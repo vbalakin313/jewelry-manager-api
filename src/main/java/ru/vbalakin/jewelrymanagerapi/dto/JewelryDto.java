@@ -5,15 +5,14 @@ import jakarta.persistence.Enumerated;
 import lombok.*;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
 
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class JewelryDto {
-    @NonNull
-    private UUID id;
+
+    private String uin;
 
     @NonNull
     private String name;
@@ -21,7 +20,7 @@ public class JewelryDto {
     @NonNull
     private String description;
 
-    private double weight;
+    private Double weight;
 
     @NonNull
     @Enumerated(EnumType.STRING)
