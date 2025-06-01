@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface ClientRepository extends JpaRepository<ClientEntity, UUID> {
 
     List<ClientEntity> findAll();
+
+    boolean existsByUin_Uin(String uinUin);
 }

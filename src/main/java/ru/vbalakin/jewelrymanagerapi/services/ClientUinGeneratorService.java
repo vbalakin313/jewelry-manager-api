@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientCountryCodeEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
+import ru.vbalakin.jewelrymanagerapi.exceptions.UinGenerationException;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
 
 import java.time.Year;
@@ -14,10 +15,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ClientUinGeneratorService {
 
-    private CountryCodeService countryCodeService;
-    private ClientRepository clientRepository;
+    private static final int MAX_ATTEMPTS = 5;
+    private static final long UNIQUE_PART_MODULE = 10_000_000_000L;
 
-    public String clientUinGenerated(UUID id){
+    private final CountryCodeService countryCodeService;
+    private final ClientRepository clientRepository;
+
+    public String generateClientUin(UUID id){
 
         String year = Year.now().toString().substring(2);
 
@@ -26,17 +30,41 @@ public class ClientUinGeneratorService {
                         new BadRequestException("Client id is not valid")
                 );
 
-        ClientCountryCodeEntity code = countryCodeService.getNumericCountryCode(client.getCountry());
+        String country = client.getCountry();
+        if (country == null){
+            throw new BadRequestException("Country is null or does not exist");
+        }
+
+        ClientCountryCodeEntity code = countryCodeService.getNumericCountryCode(country);
         String countryCode = String.valueOf(code.getCountryCode());
 
-        String uuidHash = String.valueOf(id.hashCode());
-        String codePart = uuidHash.replace("-","");
-        codePart = codePart.substring(0, Math.min(10, codePart.length()));
-        codePart = String.format("%10s", codePart).replace(' ','0');
+        String uniquePart = generateNumericUniquePart(id);
 
         WeightedSumLastNumber weightedSumLastNumber = new WeightedSumLastNumber(client);
         int lastNum = (int)weightedSumLastNumber.weightedSum(client);
 
-        return countryCode + year + codePart + lastNum;
+        String generatedUin = countryCode + year + uniquePart + lastNum;
+
+        int attempts = 0;
+        while (clientRepository.existsByUin_Uin(generatedUin) && attempts++ < MAX_ATTEMPTS){
+            generatedUin = countryCode + year + generateNumericUniquePart(UUID.randomUUID()) + lastNum;
+        }
+
+        if (attempts >= MAX_ATTEMPTS){
+            throw new UinGenerationException("Maximum generation attempts " + MAX_ATTEMPTS
+                    + " exceeded" + "\nLast generation uin " + generatedUin);
+        }
+
+        return generatedUin;
     }
+
+    private String generateNumericUniquePart(UUID id) {
+        long mostSignificantBits = id.getMostSignificantBits();
+        long leastSignificantBits = id.getLeastSignificantBits();
+
+        long numericPart = Math.abs((mostSignificantBits ^ leastSignificantBits) % UNIQUE_PART_MODULE);
+
+        return String.format("%010d", numericPart);
+    }
+
 }

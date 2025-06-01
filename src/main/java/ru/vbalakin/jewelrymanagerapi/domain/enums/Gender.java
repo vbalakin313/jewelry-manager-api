@@ -1,5 +1,8 @@
 package ru.vbalakin.jewelrymanagerapi.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum Gender {
-    MALE, FEMALE
+    @JsonProperty("Male") MALE,
+    @JsonProperty("Female") FEMALE
 }

@@ -50,7 +50,7 @@ public class ClientUinController {
         ClientEntity client = helper.getClientOrThrowException(clientId);
 
         UinEntity uin = UinEntity.builder()
-                .uin(clientUinGeneratorService.clientUinGenerated(client.getId()))
+                .uin(clientUinGeneratorService.generateClientUin(client.getId()))
                 .client(client)
                 .jewelries(new ArrayList<>())
                 .preciousMetals(new ArrayList<>())
