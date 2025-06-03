@@ -12,7 +12,9 @@ import ru.vbalakin.jewelrymanagerapi.factories.PreciousMetalDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.repositories.PreciousMetalRepository;
 import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Transactional
@@ -25,7 +27,7 @@ public class PreciousMetalController {
     private static final String CREATE_METAL = "/api/v1/metals";
     private static final String ALL_METAL = "/api/v1/metals";
     private static final String EDIT_METAL = "/api/v1/metals";
-    private static final String DELETE_METAL = "/api/v1/metals/{uin}";
+    private static final String DELETE_METAL = "/api/v1/metals/{id}";
     private final UinRepository uinRepository;
 
     @PutMapping(CREATE_METAL)
@@ -40,6 +42,9 @@ public class PreciousMetalController {
                 () -> new BadRequestException("Uin not found")
         );
 
+        Instant createdAt = Instant.now();
+        Instant updatedAt = Instant.now();
+
         PreciousMetalEntity preciousMetal = preciousMetalRepository.saveAndFlush(
                 PreciousMetalEntity.builder()
                         .metalType(metalType)
@@ -47,6 +52,8 @@ public class PreciousMetalController {
                         .assay(assay)
                         .form(form)
                         .uin(uinEntity)
+                        .createdAt(createdAt)
+                        .updatedAt(updatedAt)
                         .build()
         );
 
@@ -62,18 +69,20 @@ public class PreciousMetalController {
     }
 
     @PatchMapping(EDIT_METAL)
-    public PreciousMetalDto editMetal(@RequestParam(value = "uin_id", required = false) String uin,
+    public PreciousMetalDto editMetal(@RequestParam(value = "id", required = false) UUID id,
                                       @RequestParam MetalType metalType,
                                       @RequestParam Double weight,
                                       @RequestParam String assay,
                                       @RequestParam String form){
 
-          PreciousMetalEntity preciousMetal = preciousMetalRepository.getByUin_Uin(uin);
+          PreciousMetalEntity preciousMetal = preciousMetalRepository.getById(id);
 
+          Instant updatedAt = Instant.now();
           preciousMetal.setMetalType(metalType);
           preciousMetal.setWeight(weight);
           preciousMetal.setAssay(assay);
           preciousMetal.setForm(form);
+          preciousMetal.setUpdatedAt(updatedAt);
 
           PreciousMetalEntity updatedPreciousMetal = preciousMetalRepository.saveAndFlush(preciousMetal);
 
@@ -81,9 +90,9 @@ public class PreciousMetalController {
     }
 
     @DeleteMapping(DELETE_METAL)
-    void deleteMetal(@PathVariable String uin){
+    void deleteMetal(@PathVariable UUID id){
 
-        preciousMetalRepository.deleteByUin_Uin(uin);
+        preciousMetalRepository.deleteById(id);
     }
 
 }

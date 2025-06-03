@@ -18,11 +18,14 @@ public class PreciousMetalDtoFactory {
 
     public PreciousMetalDto makePreciousMetalDto(PreciousMetalEntity metal) {
         return PreciousMetalDto.builder()
+                .id(metal.getId())
                 .uin(metal.getUin().getUin())
                 .metalType(metal.getMetalType())
                 .weight(metal.getWeight())
                 .assay(metal.getAssay())
                 .form(metal.getForm())
+                .createdAt(metal.getCreatedAt())
+                .updatedAt(metal.getUpdatedAt())
                 .build();
     }
 }

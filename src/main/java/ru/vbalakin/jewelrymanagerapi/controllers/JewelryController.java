@@ -12,7 +12,9 @@ import ru.vbalakin.jewelrymanagerapi.factories.JewelryDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.repositories.JewelryRepository;
 import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Transactional
@@ -24,7 +26,7 @@ public class JewelryController {
 
     private static final String CREATE_JEWELRY = "/api/v1/jewelries";
     private static final String ALL_JEWELRY = "/api/v1/jewelries";
-    private static final String DELETE_JEWELRY = "/api/v1/jewelries/{uin}";
+    private static final String DELETE_JEWELRY = "/api/v1/jewelries/{id}";
     private static final String EDIT_JEWELRY = "/api/v1/jewelries";
     private final UinRepository uinRepository;
 
@@ -42,12 +44,14 @@ public class JewelryController {
                                     @RequestParam String name,
                                     @RequestParam String description,
                                     @RequestParam Double weight,
-                                    @RequestParam MetalType material){
+                                    @RequestParam MetalType material) {
 
         UinEntity uinEntity = uinRepository.findByUin(uin).orElseThrow(
                 () -> new NullPointerException("Uin not found")
         );
 
+        Instant createdAt = Instant.now();
+        Instant updatedAt = Instant.now();
 
         JewelryEntity jewelry = jewelryRepository.saveAndFlush(
                 JewelryEntity.builder()
@@ -55,6 +59,8 @@ public class JewelryController {
                         .description(description)
                         .weight(weight)
                         .material(material)
+                        .createdAt(createdAt)
+                        .updatedAt(updatedAt)
                         .uin(uinEntity)
                         .build()
         );
@@ -63,22 +69,22 @@ public class JewelryController {
     }
 
     @PatchMapping(EDIT_JEWELRY)
-    public JewelryDto editJewelry(@RequestParam(value = "uin_id", required = false) String uin,
+    public JewelryDto editJewelry(@RequestParam(value = "id", required = false) UUID id,
                                 @RequestParam String name,
                                 @RequestParam MetalType material,
                                 @RequestParam String description,
-                                @RequestParam Double weight){
+                                @RequestParam Double weight) {
 
-        UinEntity uinEntity = uinRepository.findByUin(uin)
-                .orElseThrow(() -> new EntityNotFoundException("UIN not found"));
 
-        JewelryEntity jewelry = jewelryRepository.findByUin(uinEntity)
-                .orElseThrow(() -> new EntityNotFoundException("Jewelry not found"));
+        JewelryEntity jewelry = jewelryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ID not found"));
 
+        Instant updatedAt = Instant.now();
         jewelry.setName(name);
         jewelry.setMaterial(material);
         jewelry.setDescription(description);
         jewelry.setWeight(weight);
+        jewelry.setUpdatedAt(updatedAt);
 
         JewelryEntity updatedJewelry = jewelryRepository.saveAndFlush(jewelry);
 
@@ -86,8 +92,8 @@ public class JewelryController {
     }
 
     @DeleteMapping(DELETE_JEWELRY)
-    void deleteJewelry(@PathVariable String uin){
-        jewelryRepository.deleteByUin_Uin(uin);
+    void deleteJewelry(@PathVariable UUID id){
+        jewelryRepository.deleteById(id);
 
     }
 }
