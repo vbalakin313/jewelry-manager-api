@@ -1,6 +1,8 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @Transactional
 @AllArgsConstructor
+@Tag(name = "Clients", description = "Allows you to perform operation on users")
 public class ClientController {
 
     private final ClientRepository clientRepository;
@@ -32,6 +35,9 @@ public class ClientController {
     private static final String EDIT_CLIENT = "/api/v1/clients";
     private static final String DELETE_CLIENT = "/api/v1/clients/{id}";
 
+    @Operation(
+            summary = "Display all client"
+    )
     @GetMapping(ALL_CLIENTS)
     public List<ClientDto> allClients(){
         List<ClientEntity> clients = clientRepository.findAll();
@@ -49,6 +55,9 @@ public class ClientController {
                 .collect(Collectors.toList());
     }
 
+    @Operation(
+            summary = "Edit client by ID"
+    )
     @PatchMapping(EDIT_CLIENT)
     public ClientDto editClient(@RequestParam(value = "id", required = false) UUID optionalClientId,
                                    @RequestParam String name,
@@ -69,6 +78,9 @@ public class ClientController {
         return clientDtoFactory.makeClientDto(updatedClient);
     }
 
+    @Operation(
+            summary = "Create client"
+    )
     @PutMapping(CREATE_CLIENT)
     public ClientDto createClient(@RequestParam String name,
                                   @RequestParam String surname,
@@ -88,6 +100,9 @@ public class ClientController {
         return clientDtoFactory.makeClientDto(client);
     }
 
+    @Operation(
+            summary = "Removing client by ID"
+    )
     @DeleteMapping(DELETE_CLIENT)
     void deleteClient(@PathVariable UUID id){
 

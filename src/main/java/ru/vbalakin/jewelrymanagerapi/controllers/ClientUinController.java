@@ -1,6 +1,8 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @RestController
 @Transactional
 @AllArgsConstructor
+@Tag(name = "UIN", description = "Allows you to perform operation on UIN")
 public class ClientUinController {
 
     private final UinRepository uinRepository;
@@ -36,6 +39,9 @@ public class ClientUinController {
     private static final String GET_FULL_INFORMATION = "/api/v1/client/{clientUin}/uin";
 
 
+    @Operation(
+            summary = "Get user UIN by ID"
+    )
     @GetMapping(GET_UIN)
     public Optional<UinDto> getUin(@RequestParam(value = "id", required = false) UUID clientId){
 
@@ -44,6 +50,9 @@ public class ClientUinController {
         return uinRepository.findByClientId(client.getId()).map(uinDtoFactory::makeUinDto);
     }
 
+    @Operation(
+            summary = "Create user UIN by ID"
+    )
     @PutMapping(CREATE_UIN)
     public UinDto createUin(@PathVariable UUID clientId) {
 
@@ -68,6 +77,9 @@ public class ClientUinController {
         return uinDtoFactory.makeUinDto(uin);
     }
 
+    @Operation(
+            summary = "Get full user information by UIN"
+    )
     @GetMapping(GET_FULL_INFORMATION)
     public UinFullClientInformationDto getFullInformation(@PathVariable String clientUin) {
 

@@ -1,5 +1,7 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RestController
 @Transactional
 @AllArgsConstructor
+@Tag(name = "Jewelry", description = "Allows you to perform operations on jewelry")
 public class JewelryController {
 
     private final JewelryRepository jewelryRepository;
@@ -31,6 +34,9 @@ public class JewelryController {
     private final UinRepository uinRepository;
 
 
+    @Operation(
+            summary = "Display all decorations"
+    )
     @GetMapping(ALL_JEWELRY)
     public List<JewelryDto> allJewelries(){
 
@@ -39,6 +45,9 @@ public class JewelryController {
         return jewelryDtoFactory.makeJewelryDtos(jewelries);
     }
 
+    @Operation(
+            summary = "Creating a decoration with user binding"
+    )
     @PutMapping(CREATE_JEWELRY)
     public JewelryDto createJewelry(@RequestParam String uin,
                                     @RequestParam String name,
@@ -68,6 +77,9 @@ public class JewelryController {
         return jewelryDtoFactory.makeJewelryDto(jewelry);
     }
 
+    @Operation(
+            summary = "Editing decoration by ID"
+    )
     @PatchMapping(EDIT_JEWELRY)
     public JewelryDto editJewelry(@RequestParam(value = "id", required = false) UUID id,
                                 @RequestParam String name,
@@ -91,6 +103,9 @@ public class JewelryController {
         return jewelryDtoFactory.makeJewelryDto(updatedJewelry);
     }
 
+    @Operation(
+            summary = "Removing jewelry by ID"
+    )
     @DeleteMapping(DELETE_JEWELRY)
     void deleteJewelry(@PathVariable UUID id){
         jewelryRepository.deleteById(id);

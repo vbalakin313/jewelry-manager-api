@@ -1,5 +1,7 @@
 package ru.vbalakin.jewelrymanagerapi.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RestController
 @Transactional
 @AllArgsConstructor
+@Tag(name = "Precious metals", description = "Allows operations on precious metals")
 public class PreciousMetalController {
 
     private final PreciousMetalRepository preciousMetalRepository;
@@ -30,6 +33,10 @@ public class PreciousMetalController {
     private static final String DELETE_METAL = "/api/v1/metals/{id}";
     private final UinRepository uinRepository;
 
+
+    @Operation(
+            summary = "Creating metal with user binding"
+    )
     @PutMapping(CREATE_METAL)
     public PreciousMetalDto createMetal(@RequestParam String uin,
                                         @RequestParam MetalType metalType,
@@ -60,6 +67,9 @@ public class PreciousMetalController {
         return preciousMetalDtoFactory.makePreciousMetalDto(preciousMetal);
     }
 
+    @Operation(
+            summary = "Display all metals"
+    )
     @GetMapping(ALL_METAL)
     public List<PreciousMetalDto> allMetals(){
 
@@ -68,6 +78,9 @@ public class PreciousMetalController {
         return preciousMetalDtoFactory.makePreciousMetalDtos(preciousMetal);
     }
 
+    @Operation(
+            summary = "Editing metal by ID"
+    )
     @PatchMapping(EDIT_METAL)
     public PreciousMetalDto editMetal(@RequestParam(value = "id", required = false) UUID id,
                                       @RequestParam MetalType metalType,
@@ -89,6 +102,9 @@ public class PreciousMetalController {
           return preciousMetalDtoFactory.makePreciousMetalDto(updatedPreciousMetal);
     }
 
+    @Operation(
+            summary = "Metal removal by ID"
+    )
     @DeleteMapping(DELETE_METAL)
     void deleteMetal(@PathVariable UUID id){
 
