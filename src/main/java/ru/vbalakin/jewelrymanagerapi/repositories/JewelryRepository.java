@@ -10,8 +10,5 @@ import java.util.UUID;
 public interface JewelryRepository extends JpaRepository<JewelryEntity, UUID> {
     JewelryEntity getById(UUID id);
 
-    Optional<JewelryEntity> findByUin(UinEntity uin);
-
-    void deleteByUin_Uin(String uin);
 }
 

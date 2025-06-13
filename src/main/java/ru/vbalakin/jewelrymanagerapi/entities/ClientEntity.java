@@ -36,4 +36,6 @@ public class ClientEntity {
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private UinEntity uin;
 
+    public ClientEntity(UUID uuid, String petr, String petrovich, Gender gender, String russia, ClientCountryCodeEntity build) {
+    }
 }
