@@ -50,4 +50,8 @@ public class JewelryDto {
     @Enumerated(EnumType.STRING)
     @Schema(description = "Material type")
     private MetalType material;
+
+    public JewelryDto(UUID jewelryId, String newName, String description, double weight, MetalType material, Instant createdAt, Instant now) {
+
+    }
 }
