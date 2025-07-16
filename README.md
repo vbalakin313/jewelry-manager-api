@@ -169,10 +169,13 @@ After application startup:
 - Maven 3.8+  
 
 ### Installation
-1. Clone the repository:
 ```bash
 git clone https://github.com/vbalakin313/jewelry-manager-api
 cd jewelry-manager-api
+```
+
+### Docker
+```bash
 
 # Build and start containers (PostgreSQL + Spring Boot app)
 docker-compose up --build -d
