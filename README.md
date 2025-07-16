@@ -173,3 +173,18 @@ After application startup:
 ```bash
 git clone https://github.com/vbalakin313/jewelry-manager-api
 cd jewelry-manager-api
+
+# Build and start containers (PostgreSQL + Spring Boot app)
+docker-compose up --build -d
+
+# Check running containers
+docker-compose ps
+
+# View app logs
+docker-compose logs -f jewelry_manager_api_app
+
+# Graceful shutdown (preserves database)
+docker-compose down
+
+# Full cleanup (removes database volume)
+docker-compose down -v
