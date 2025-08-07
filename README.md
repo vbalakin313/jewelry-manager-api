@@ -46,6 +46,10 @@ Jewelry Manager API is a server-side solution for managing clients' jewelry and 
 
 ## API Endpoints
 
+### Auth
+- `POST /api/v1/auth/signup` - registration
+- `POST /api/v1/auth/login` - authentication
+
 ### Clients
 - `GET /api/v1/clients` - list all clients  
 - `PUT /api/v1/clients` - create new client  
@@ -90,6 +94,15 @@ After application startup:
 ![Screenshot 2025-06-14 122250](https://github.com/user-attachments/assets/2a60cbd2-05ea-4534-8823-3ea30b329f9c)  
 
 ## Request Examples
+## Example of User registration and authentication
+**1. User registration:**
+<img width="1894" height="436" alt="Снимок экрана 2025-08-07 170106" src="https://github.com/user-attachments/assets/e9a6cf3b-ac40-4cc6-8888-1c7ff21c3fa4" />
+<img width="859" height="167" alt="Снимок экрана 2025-08-07 170113" src="https://github.com/user-attachments/assets/2d853a6d-64d7-4516-ae60-89070745f48d" />
+
+**2. User authentication:**
+<img width="1887" height="386" alt="Снимок экрана 2025-08-07 170336" src="https://github.com/user-attachments/assets/d577f7c9-f7d9-4a14-80a6-882879011373" />
+<img width="388" height="100" alt="Снимок экрана 2025-08-07 170342" src="https://github.com/user-attachments/assets/b4466c2f-f9e5-4168-899c-38a563e20952" />
+
 ## Example of requests when working with clients
 **1. Creating a client:**  
 ![Снимок экрана 2025-06-14 123432](https://github.com/user-attachments/assets/5d438fec-b4d6-41e2-ad58-8d0147ed6930)
