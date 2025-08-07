@@ -14,7 +14,7 @@ import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.exceptions.NotFoundException;
 import ru.vbalakin.jewelrymanagerapi.factories.UinDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.factories.UinFullClientInformationDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinService;
 import ru.vbalakin.jewelrymanagerapi.services.ClientUinGeneratorService;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.UUID;
 @Tag(name = "UIN", description = "Allows you to perform operation on UIN")
 public class ClientUinController {
 
-    private final UinRepository uinRepository;
+    private final UinService uinService;
     private final UinDtoFactory uinDtoFactory;
     private final UinFullClientInformationDtoFactory uinFullClientInformationDtoFactory;
     private final ClientUinGeneratorService clientUinGeneratorService;
@@ -47,7 +47,7 @@ public class ClientUinController {
 
         ClientEntity client = helper.getClientOrThrowException(clientId);
 
-        return uinRepository.findByClientId(client.getId()).map(uinDtoFactory::makeUinDto);
+        return uinService.findByClientId(client.getId()).map(uinDtoFactory::makeUinDto);
     }
 
     @Operation(
@@ -70,7 +70,7 @@ public class ClientUinController {
             uin.setPreciousMetals(new ArrayList<>(client.getUin().getPreciousMetals()));
         }
 
-        uin = uinRepository.saveAndFlush(uin);
+        uin = uinService.saveAndFlush(uin);
 
         client.setUin(uin);
 
@@ -83,7 +83,7 @@ public class ClientUinController {
     @GetMapping(GET_FULL_INFORMATION)
     public UinFullClientInformationDto getFullInformation(@PathVariable String clientUin) {
 
-        UinEntity uinEntity = uinRepository.findByUin(clientUin).orElseThrow(
+        UinEntity uinEntity = uinService.findByUin(clientUin).orElseThrow(
                 () -> new NotFoundException("Uin not found")
         );
 

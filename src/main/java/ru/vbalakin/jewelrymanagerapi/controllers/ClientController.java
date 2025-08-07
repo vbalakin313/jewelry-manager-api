@@ -11,7 +11,7 @@ import ru.vbalakin.jewelrymanagerapi.domain.helper.ControllerHelper;
 import ru.vbalakin.jewelrymanagerapi.dto.ClientDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.ClientDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.ClientService;
 import ru.vbalakin.jewelrymanagerapi.services.CountryCodeService;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Clients", description = "Allows you to perform operation on users")
 public class ClientController {
 
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
     private final CountryCodeService countryCodeService;
     private final ClientDtoFactory clientDtoFactory;
     private final ControllerHelper helper;
@@ -40,7 +40,7 @@ public class ClientController {
     )
     @GetMapping(ALL_CLIENTS)
     public List<ClientDto> allClients(){
-        List<ClientEntity> clients = clientRepository.findAll();
+        List<ClientEntity> clients = clientService.findAll();
 
         return clients.stream()
                 .map(client -> {
@@ -73,7 +73,7 @@ public class ClientController {
         client.setCountry(country);
         client.setClientCountryCode(countryCodeService.getNumericCountryCode(country));
 
-       ClientEntity updatedClient = clientRepository.saveAndFlush(client);
+       ClientEntity updatedClient = clientService.saveAndFlush(client);
 
         return clientDtoFactory.makeClientDto(updatedClient);
     }
@@ -87,7 +87,7 @@ public class ClientController {
                                   @RequestParam Gender gender,
                                   @RequestParam String country){
 
-        ClientEntity client = clientRepository.saveAndFlush(
+        ClientEntity client = clientService.saveAndFlush(
                 ClientEntity.builder()
                         .name(name)
                         .surname(surname)
@@ -108,6 +108,6 @@ public class ClientController {
 
         helper.getClientOrThrowException(id);
 
-        clientRepository.deleteById(id);
+        clientService.deleteById(id);
     }
 }

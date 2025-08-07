@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientCountryCodeEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.ClientService;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -26,7 +26,7 @@ class ClientUinGeneratorServiceTest {
     CountryCodeService countryCodeService;
 
     @Mock
-    ClientRepository clientRepository;
+    ClientService clientService;
 
     @InjectMocks
     ClientUinGeneratorService service;
@@ -37,14 +37,14 @@ class ClientUinGeneratorServiceTest {
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setCountry("Country");
 
-        when(clientRepository.findById(any(UUID.class))).thenReturn(Optional.of(clientEntity));
+        when(clientService.findById(any(UUID.class))).thenReturn(Optional.of(clientEntity));
 
         ClientCountryCodeEntity clientCountryCodeEntity = new ClientCountryCodeEntity();
         clientCountryCodeEntity.setCountryCode(123);
 
         when(countryCodeService.getNumericCountryCode(any(String.class))).thenReturn(clientCountryCodeEntity);
 
-        when(clientRepository.existsByUin_Uin(any(String.class))).thenReturn(false);
+        when(clientService.existsByUin_Uin(any(String.class))).thenReturn(false);
 
         Set<String> uins = new HashSet<>();
         for (int i = 0; i < 10000; i++) {

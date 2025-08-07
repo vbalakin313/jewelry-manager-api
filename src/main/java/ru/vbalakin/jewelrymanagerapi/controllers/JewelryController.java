@@ -11,8 +11,8 @@ import ru.vbalakin.jewelrymanagerapi.dto.JewelryDto;
 import ru.vbalakin.jewelrymanagerapi.entities.JewelryEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.JewelryDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.JewelryRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.JewelryService;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinService;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,14 +24,14 @@ import java.util.UUID;
 @Tag(name = "Jewelry", description = "Allows you to perform operations on jewelry")
 public class JewelryController {
 
-    private final JewelryRepository jewelryRepository;
+    private final JewelryService jewelryService;
     private final JewelryDtoFactory jewelryDtoFactory;
 
     private static final String CREATE_JEWELRY = "/api/v1/jewelries";
     private static final String ALL_JEWELRY = "/api/v1/jewelries";
     private static final String DELETE_JEWELRY = "/api/v1/jewelries/{id}";
     private static final String EDIT_JEWELRY = "/api/v1/jewelries";
-    private final UinRepository uinRepository;
+    private final UinService uinService;
 
 
     @Operation(
@@ -40,7 +40,7 @@ public class JewelryController {
     @GetMapping(ALL_JEWELRY)
     public List<JewelryDto> allJewelries(){
 
-        List<JewelryEntity> jewelries = jewelryRepository.findAll();
+        List<JewelryEntity> jewelries = jewelryService.findAll();
 
         return jewelryDtoFactory.makeJewelryDtos(jewelries);
     }
@@ -55,14 +55,14 @@ public class JewelryController {
                                     @RequestParam Double weight,
                                     @RequestParam MetalType material) {
 
-        UinEntity uinEntity = uinRepository.findByUin(uin).orElseThrow(
+        UinEntity uinEntity = uinService.findByUin(uin).orElseThrow(
                 () -> new NullPointerException("Uin not found")
         );
 
         Instant createdAt = Instant.now();
         Instant updatedAt = Instant.now();
 
-        JewelryEntity jewelry = jewelryRepository.saveAndFlush(
+        JewelryEntity jewelry = jewelryService.saveAndFlush(
                 JewelryEntity.builder()
                         .name(name)
                         .description(description)
@@ -88,7 +88,7 @@ public class JewelryController {
                                 @RequestParam Double weight) {
 
 
-        JewelryEntity jewelry = jewelryRepository.findById(id)
+        JewelryEntity jewelry = jewelryService.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ID not found"));
 
         Instant updatedAt = Instant.now();
@@ -98,7 +98,7 @@ public class JewelryController {
         jewelry.setWeight(weight);
         jewelry.setUpdatedAt(updatedAt);
 
-        JewelryEntity updatedJewelry = jewelryRepository.saveAndFlush(jewelry);
+        JewelryEntity updatedJewelry = jewelryService.saveAndFlush(jewelry);
 
         return jewelryDtoFactory.makeJewelryDto(updatedJewelry);
     }
@@ -108,7 +108,7 @@ public class JewelryController {
     )
     @DeleteMapping(DELETE_JEWELRY)
     void deleteJewelry(@PathVariable UUID id){
-        jewelryRepository.deleteById(id);
+        jewelryService.deleteById(id);
 
     }
 }

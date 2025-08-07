@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
@@ -14,10 +13,8 @@ import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.JewelryEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.JewelryDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientCountryCodeRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.JewelryRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
-import ru.vbalakin.jewelrymanagerapi.services.CountryCodeService;
+import ru.vbalakin.jewelrymanagerapi.repositories.JewelryService;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinService;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,13 +30,13 @@ import static org.mockito.Mockito.when;
 class JewelryControllerTest {
 
     @Mock
-    JewelryRepository jewelryRepository;
+    JewelryService jewelryService;
 
     @Mock
     JewelryDtoFactory jewelryDtoFactory;
 
     @Mock
-    UinRepository uinRepository;
+    UinService uinService;
 
     @InjectMocks
     JewelryController jewelryController;
@@ -70,7 +67,7 @@ class JewelryControllerTest {
                         .build()
         );
 
-        when(jewelryRepository.findAll()).thenReturn(jewelries);
+        when(jewelryService.findAll()).thenReturn(jewelries);
 
         jewelryController.allJewelries();
 
@@ -106,7 +103,7 @@ class JewelryControllerTest {
                 .jewelries(new ArrayList<>())
                 .build();
 
-            when(uinRepository.findByUin(uin)).thenReturn(Optional.of(uinEntity));
+            when(uinService.findByUin(uin)).thenReturn(Optional.of(uinEntity));
 
             JewelryEntity savedJewelry = JewelryEntity.builder()
                     .id(UUID.randomUUID())
@@ -118,7 +115,7 @@ class JewelryControllerTest {
                     .material(material)
                     .build();
 
-            when(jewelryRepository.saveAndFlush(any(JewelryEntity.class))).thenReturn(savedJewelry);
+            when(jewelryService.saveAndFlush(any(JewelryEntity.class))).thenReturn(savedJewelry);
 
             JewelryDto expectedDto = new JewelryDto();
             expectedDto.setId(savedJewelry.getId());
@@ -170,8 +167,8 @@ class JewelryControllerTest {
                 Instant.now()
         );
 
-        when(jewelryRepository.findById(jewelryId)).thenReturn(Optional.of(originalJewelry));
-        when(jewelryRepository.saveAndFlush(any(JewelryEntity.class)))
+        when(jewelryService.findById(jewelryId)).thenReturn(Optional.of(originalJewelry));
+        when(jewelryService.saveAndFlush(any(JewelryEntity.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0)); //
         when(jewelryDtoFactory.makeJewelryDto(originalJewelry)).thenReturn(expectedDto);
 

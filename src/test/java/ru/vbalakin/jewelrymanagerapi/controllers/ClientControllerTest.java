@@ -6,14 +6,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.dto.ClientDto;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientCountryCodeEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.ClientDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.repositories.ClientCountryCodeRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.ClientService;
 import ru.vbalakin.jewelrymanagerapi.services.CountryCodeService;
 
 import java.util.List;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientControllerTest {
 
     @Mock
-    ClientRepository clientRepository;
+    ClientService clientService;
 
     @Mock
     ClientDtoFactory clientDtoFactory;
@@ -75,7 +74,7 @@ class ClientControllerTest {
                         .build()
         );
 
-        Mockito.when(clientRepository.findAll()).thenReturn(clients);
+        Mockito.when(clientService.findAll()).thenReturn(clients);
 
         var result = clientController.allClients();
 
@@ -103,7 +102,7 @@ class ClientControllerTest {
                 .clientCountryCode(countryCode)
                 .build();
 
-        Mockito.when(clientRepository.saveAndFlush(Mockito.any(ClientEntity.class)))
+        Mockito.when(clientService.saveAndFlush(Mockito.any(ClientEntity.class)))
                 .thenReturn(savedClient);
 
         ClientDto expectedDto = new ClientDto();
@@ -156,7 +155,7 @@ class ClientControllerTest {
                 )
                 .build();
 
-        Mockito.when(clientRepository.saveAndFlush(Mockito.any(ClientEntity.class)))
+        Mockito.when(clientService.saveAndFlush(Mockito.any(ClientEntity.class)))
                 .thenReturn(updatedClient);
         Mockito.when(clientDtoFactory.makeClientDto(updatedClient))
                 .thenReturn(new ClientDto(updatedClient.getId(),
@@ -166,7 +165,7 @@ class ClientControllerTest {
                         updatedClient.getCountry())
                 );
 
-        ClientEntity result = clientRepository.saveAndFlush(updatedClient);
+        ClientEntity result = clientService.saveAndFlush(updatedClient);
         ClientDto dtoResult = clientDtoFactory.makeClientDto(result);
 
         assertEquals(clientId1, dtoResult.getId());

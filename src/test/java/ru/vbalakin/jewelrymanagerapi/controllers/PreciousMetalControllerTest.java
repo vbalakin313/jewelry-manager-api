@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.Gender;
 import ru.vbalakin.jewelrymanagerapi.domain.enums.MetalType;
 import ru.vbalakin.jewelrymanagerapi.dto.PreciousMetalDto;
@@ -15,8 +14,8 @@ import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.PreciousMetalEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.PreciousMetalDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.PreciousMetalRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.PreciousMetalService;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinService;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -30,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class PreciousMetalControllerTest {
 
     @Mock
-    PreciousMetalRepository preciousMetalRepository;
+    PreciousMetalService preciousMetalService;
 
     @Mock
     PreciousMetalDtoFactory preciousMetalDtoFactory;
 
     @Mock
-    UinRepository uinRepository;
+    UinService uinService;
 
     @InjectMocks
     PreciousMetalController preciousMetalController;
@@ -90,7 +89,7 @@ class PreciousMetalControllerTest {
                 )
         );
 
-        Mockito.when(preciousMetalRepository.findAll()).thenReturn(preciousMetalEntities);
+        Mockito.when(preciousMetalService.findAll()).thenReturn(preciousMetalEntities);
 
         preciousMetalController.allMetals();
 
@@ -128,7 +127,7 @@ class PreciousMetalControllerTest {
                 .jewelries(new ArrayList<>())
                 .build();
 
-        Mockito.when(uinRepository.findByUin(Mockito.any())).thenReturn(Optional.of(uinEntity));
+        Mockito.when(uinService.findByUin(Mockito.any())).thenReturn(Optional.of(uinEntity));
 
         Instant createdAt = Instant.now();
         Instant updatedAt = Instant.now();
@@ -143,7 +142,7 @@ class PreciousMetalControllerTest {
                     .updatedAt(updatedAt)
                     .build();
 
-        Mockito.when(preciousMetalRepository.saveAndFlush(Mockito.any())).thenReturn(metalEntity);
+        Mockito.when(preciousMetalService.saveAndFlush(Mockito.any())).thenReturn(metalEntity);
 
         PreciousMetalDto preciousMetalDto = new PreciousMetalDto();
         preciousMetalDto.setMetalType(MetalType.PALLADIUM);
@@ -205,7 +204,7 @@ class PreciousMetalControllerTest {
                 .updatedAt(updatedAt)
                 .build();
 
-        Mockito.when(preciousMetalRepository.getById(Mockito.any())).thenReturn(metalEntity);
+        Mockito.when(preciousMetalService.getById(Mockito.any())).thenReturn(metalEntity);
 
         Instant newUpdatedAt = Instant.now();
         metalEntity.setMetalType(metalType);
@@ -214,7 +213,7 @@ class PreciousMetalControllerTest {
         metalEntity.setForm(form);
         metalEntity.setUpdatedAt(newUpdatedAt);
 
-        Mockito.when(preciousMetalRepository.saveAndFlush(Mockito.any())).thenReturn(metalEntity);
+        Mockito.when(preciousMetalService.saveAndFlush(Mockito.any())).thenReturn(metalEntity);
 
         PreciousMetalDto preciousMetalDto = new PreciousMetalDto();
         preciousMetalDto.setMetalType(metalType);

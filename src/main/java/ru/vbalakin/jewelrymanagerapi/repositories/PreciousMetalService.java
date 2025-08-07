@@ -5,7 +5,7 @@ import ru.vbalakin.jewelrymanagerapi.entities.PreciousMetalEntity;
 
 import java.util.UUID;
 
-public interface PreciousMetalRepository extends JpaRepository<PreciousMetalEntity, UUID> {
+public interface PreciousMetalService extends JpaRepository<PreciousMetalEntity, UUID> {
     PreciousMetalEntity getById(UUID id);
 
 }

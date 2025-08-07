@@ -6,7 +6,7 @@ import ru.vbalakin.jewelrymanagerapi.entities.ClientCountryCodeEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
 import ru.vbalakin.jewelrymanagerapi.exceptions.UinGenerationException;
-import ru.vbalakin.jewelrymanagerapi.repositories.ClientRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.ClientService;
 
 import java.time.Year;
 import java.util.UUID;
@@ -19,13 +19,13 @@ public class ClientUinGeneratorService {
     private static final long UNIQUE_PART_MODULE = 10_000_000_000L;
 
     private final CountryCodeService countryCodeService;
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
 
     public String generateClientUin(UUID id){
 
         String year = Year.now().toString().substring(2);
 
-        ClientEntity client = clientRepository.findById(id)
+        ClientEntity client = clientService.findById(id)
                 .orElseThrow(() ->
                         new BadRequestException("Client id is not valid")
                 );
@@ -46,7 +46,7 @@ public class ClientUinGeneratorService {
         String generatedUin = countryCode + year + uniquePart + lastNum;
 
         int attempts = 0;
-        while (clientRepository.existsByUin_Uin(generatedUin) && attempts++ < MAX_ATTEMPTS){
+        while (clientService.existsByUin_Uin(generatedUin) && attempts++ < MAX_ATTEMPTS){
             generatedUin = countryCode + year + generateNumericUniquePart(UUID.randomUUID()) + lastNum;
         }
 

@@ -15,7 +15,7 @@ import ru.vbalakin.jewelrymanagerapi.entities.ClientEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.factories.UinDtoFactory;
 import ru.vbalakin.jewelrymanagerapi.factories.UinFullClientInformationDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinService;
 import ru.vbalakin.jewelrymanagerapi.services.ClientUinGeneratorService;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientUinControllerTest {
 
     @Mock
-    UinRepository uinRepository;
+    UinService uinService;
 
     @Mock
     UinDtoFactory uinDtoFactory;
@@ -87,7 +87,7 @@ class ClientUinControllerTest {
                 .build();
 
         Mockito.when(helper.getClientOrThrowException(Mockito.any())).thenReturn(clientEntity);
-        Mockito.when(uinRepository.findByClientId(clientEntity.getId())).thenReturn(Optional.of(uinEntity));
+        Mockito.when(uinService.findByClientId(clientEntity.getId())).thenReturn(Optional.of(uinEntity));
         Mockito.when(uinDtoFactory.makeUinDto(uinEntity)).thenReturn(new UinDto());
 
         Optional<UinDto> uinDto = clientUinController.getUin(clientId);
@@ -138,7 +138,7 @@ class ClientUinControllerTest {
                 .jewelries(new ArrayList<>())
                 .build();
 
-        Mockito.when(uinRepository.saveAndFlush(Mockito.any())).thenReturn(uinEntity);
+        Mockito.when(uinService.saveAndFlush(Mockito.any())).thenReturn(uinEntity);
 
         clientEntity.setUin(uinEntity);
 
@@ -175,7 +175,7 @@ class ClientUinControllerTest {
                 .jewelries(new ArrayList<>())
                 .build();
 
-        Mockito.when(uinRepository.findByUin(Mockito.any())).thenReturn(Optional.ofNullable(uinEntity));
+        Mockito.when(uinService.findByUin(Mockito.any())).thenReturn(Optional.ofNullable(uinEntity));
 
         Mockito.when(uinFullClientInformationDtoFactory.makeUinFullClientInfoDto(Mockito.any(UinEntity.class)))
                 .thenReturn(new UinFullClientInformationDto());

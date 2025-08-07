@@ -11,8 +11,8 @@ import ru.vbalakin.jewelrymanagerapi.entities.PreciousMetalEntity;
 import ru.vbalakin.jewelrymanagerapi.entities.UinEntity;
 import ru.vbalakin.jewelrymanagerapi.exceptions.BadRequestException;
 import ru.vbalakin.jewelrymanagerapi.factories.PreciousMetalDtoFactory;
-import ru.vbalakin.jewelrymanagerapi.repositories.PreciousMetalRepository;
-import ru.vbalakin.jewelrymanagerapi.repositories.UinRepository;
+import ru.vbalakin.jewelrymanagerapi.repositories.PreciousMetalService;
+import ru.vbalakin.jewelrymanagerapi.repositories.UinService;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,14 +24,14 @@ import java.util.UUID;
 @Tag(name = "Precious metals", description = "Allows operations on precious metals")
 public class PreciousMetalController {
 
-    private final PreciousMetalRepository preciousMetalRepository;
+    private final PreciousMetalService preciousMetalService;
     private final PreciousMetalDtoFactory preciousMetalDtoFactory;
 
     private static final String CREATE_METAL = "/api/v1/metals";
     private static final String ALL_METAL = "/api/v1/metals";
     private static final String EDIT_METAL = "/api/v1/metals";
     private static final String DELETE_METAL = "/api/v1/metals/{id}";
-    private final UinRepository uinRepository;
+    private final UinService uinService;
 
 
     @Operation(
@@ -45,14 +45,14 @@ public class PreciousMetalController {
                                         @RequestParam String form){
 
 
-        UinEntity uinEntity = uinRepository.findByUin(uin).orElseThrow(
+        UinEntity uinEntity = uinService.findByUin(uin).orElseThrow(
                 () -> new BadRequestException("Uin not found")
         );
 
         Instant createdAt = Instant.now();
         Instant updatedAt = Instant.now();
 
-        PreciousMetalEntity preciousMetal = preciousMetalRepository.saveAndFlush(
+        PreciousMetalEntity preciousMetal = preciousMetalService.saveAndFlush(
                 PreciousMetalEntity.builder()
                         .metalType(metalType)
                         .weight(weight)
@@ -73,7 +73,7 @@ public class PreciousMetalController {
     @GetMapping(ALL_METAL)
     public List<PreciousMetalDto> allMetals(){
 
-        List<PreciousMetalEntity> preciousMetal = preciousMetalRepository.findAll();
+        List<PreciousMetalEntity> preciousMetal = preciousMetalService.findAll();
 
         return preciousMetalDtoFactory.makePreciousMetalDtos(preciousMetal);
     }
@@ -88,7 +88,7 @@ public class PreciousMetalController {
                                       @RequestParam String assay,
                                       @RequestParam String form){
 
-          PreciousMetalEntity preciousMetal = preciousMetalRepository.getById(id);
+          PreciousMetalEntity preciousMetal = preciousMetalService.getById(id);
 
           Instant updatedAt = Instant.now();
           preciousMetal.setMetalType(metalType);
@@ -97,7 +97,7 @@ public class PreciousMetalController {
           preciousMetal.setForm(form);
           preciousMetal.setUpdatedAt(updatedAt);
 
-          PreciousMetalEntity updatedPreciousMetal = preciousMetalRepository.saveAndFlush(preciousMetal);
+          PreciousMetalEntity updatedPreciousMetal = preciousMetalService.saveAndFlush(preciousMetal);
 
           return preciousMetalDtoFactory.makePreciousMetalDto(updatedPreciousMetal);
     }
@@ -108,7 +108,7 @@ public class PreciousMetalController {
     @DeleteMapping(DELETE_METAL)
     void deleteMetal(@PathVariable UUID id){
 
-        preciousMetalRepository.deleteById(id);
+        preciousMetalService.deleteById(id);
     }
 
 }
