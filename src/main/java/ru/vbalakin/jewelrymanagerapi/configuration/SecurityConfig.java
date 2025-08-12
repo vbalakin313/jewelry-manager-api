@@ -1,5 +1,7 @@
 package ru.vbalakin.jewelrymanagerapi.configuration;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,11 @@ import ru.vbalakin.jewelrymanagerapi.services.UserService;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@SecurityScheme(
+        name = "basicAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "basic"
+)
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
