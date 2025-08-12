@@ -82,7 +82,7 @@ Jewelry Manager API is a server-side solution for managing clients' jewelry and 
 
 ## API Documentation
 After application startup:  
-- Swagger UI: `http://localhost:8080/swagger-ui.html`  
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`  
 - OpenAPI (JSON): `http://localhost:8080/v3/api-docs`  
 
 **Swagger interface example:**
