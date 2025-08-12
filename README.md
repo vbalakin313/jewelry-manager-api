@@ -18,7 +18,7 @@ Jewelry Manager API is a server-side solution for managing clients' jewelry and 
 - **Build System**: Maven  
 - **API Documentation**: Swagger/OpenAPI  
 - **Caching**: Spring Cache  
-- **Testing**: JUnit 5, Mockito  
+- **Testing**: Postman, JUnit 5, Mockito  
 
 ## System Entities
 
@@ -93,7 +93,7 @@ After application startup:
 ![Screenshot 2025-06-14 122239](https://github.com/user-attachments/assets/4edaadf8-1a43-4a07-8291-8f55bb113244)  
 ![Screenshot 2025-06-14 122250](https://github.com/user-attachments/assets/2a60cbd2-05ea-4534-8823-3ea30b329f9c)  
 
-## Request Examples
+## Request Examples (Postman)
 ## Example of User registration and authentication
 **1. User registration:**
 <img width="1894" height="436" alt="Снимок экрана 2025-08-07 170106" src="https://github.com/user-attachments/assets/e9a6cf3b-ac40-4cc6-8888-1c7ff21c3fa4" />
