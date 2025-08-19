@@ -1,5 +1,5 @@
 # Jewelry Manager API
-
+[Русская версия](README.ru.md) | [English version](README.md)
 ## Project Description
 
 Jewelry Manager API is a server-side solution for managing clients' jewelry and precious metals, implementing virtual safe deposit box functionality. The system provides a reliable toolkit for tracking and controlling valuables with unique identifier (UIN) generation and complete operation history.
