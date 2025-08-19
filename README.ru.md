@@ -1,4 +1,5 @@
 # Jewelry Manager API
+[Russian version](README.ru.md) | [Английская версия](README.md)
 
 ## Описание проекта
 
